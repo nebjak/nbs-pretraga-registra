@@ -59,6 +59,10 @@ function getBankData(resultRows) {
   return data;
 }
 
+/**
+ * @param {(string | number)} pib
+ * @returns {Promise.<CompanyData>}
+ */
 async function getCompanyData(pib) {
   const dom = await JSDOM.fromURL(URL + pib);
   const result = dom.window.document.querySelector("table#result").rows;
@@ -81,3 +85,22 @@ module.exports = {
   getCompanyData
 };
 
+/**
+ * @typedef {Object} BankAccount
+ * @property {string} number - Account number
+ * @property {string} status - Status
+ * @property {Date} opened - Date when account opened
+ * @property {string} bank - Name of bank
+ */
+
+/**
+ * @typedef {Object} CompanyData
+ * @property {string} mb - Maticni broj
+ * @property {string} pib - PIB
+ * @property {string} name - Name
+ * @property {string} address - Address
+ * @property {string} place - Place
+ * @property {string} municipality - Municipality
+ * @property {string} activity - Activity
+ * @property {Array.<BankAccount>} banks - Array of bank accounts
+ */
