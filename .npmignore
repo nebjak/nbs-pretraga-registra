@@ -1,0 +1,7 @@
+node_modules
+test
+demos
+.vscode
+.prettierrc
+.travis.yml
+*.tgz
