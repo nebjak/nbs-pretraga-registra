@@ -3,54 +3,100 @@ const { JSDOM } = require('jsdom');
 // NBS data access url
 const URL = 'https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&pib=';
 
-function getFromTable(resultRows, row, column) {
-  return resultRows[row].children[column].textContent.trim();
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @param {number} row
+ * @param {number} column
+ * @returns {string}
+ */
+function getFromTable(rawResult, row, column) {
+  return rawResult[row].children[column].textContent.trim();
 }
 
-function getMB(resultRows) {
-  return getFromTable(resultRows, 4, 3);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getMB(rawResult) {
+  return getFromTable(rawResult, 4, 3);
 }
 
-function getPIB(resultRows) {
-  return getFromTable(resultRows, 5, 3);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getPIB(rawResult) {
+  return getFromTable(rawResult, 5, 3);
 }
 
-function getName(resultRows) {
-  return getFromTable(resultRows, 1, 1);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getName(rawResult) {
+  return getFromTable(rawResult, 1, 1);
 }
 
-function getAddress(resultRows) {
-  return getFromTable(resultRows, 2, 1);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getAddress(rawResult) {
+  return getFromTable(rawResult, 2, 1);
 }
 
-function getPlace(resultRows) {
-  return getFromTable(resultRows, 3, 1);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getPlace(rawResult) {
+  return getFromTable(rawResult, 3, 1);
 }
 
-function getMunicipality(resultRows) {
-  return getFromTable(resultRows, 4, 1);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getMunicipality(rawResult) {
+  return getFromTable(rawResult, 4, 1);
 }
 
-function getActivity(resultRows) {
-  return getFromTable(resultRows, 5, 1);
+/**
+ *
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {string}
+ */
+function getActivity(rawResult) {
+  return getFromTable(rawResult, 5, 1);
 }
 
-function getBankData(resultRows) {
+/**
+ * @param {Array.<HTMLTableRowElement>} rawResult
+ * @returns {Array.<BankAccount>} rawResult
+ */
+function getBankData(rawResult) {
   const data = [];
 
-  for (let i = 2; i < resultRows.length; i += 9) {
+  for (let i = 2; i < rawResult.length; i += 9) {
     const bank = {
-      number: getFromTable(resultRows, i, 3),
-      status: getFromTable(resultRows, i + 1, 3),
+      number: getFromTable(rawResult, i, 3),
+      status: getFromTable(rawResult, i + 1, 3),
       opened: new Date(
         Date.parse(
-          getFromTable(resultRows, i + 4, 3)
+          getFromTable(rawResult, i + 4, 3)
             .split('.')
             .reverse()
             .join('-')
         )
       ),
-      bank: getFromTable(resultRows, i + 4, 1),
+      bank: getFromTable(rawResult, i + 4, 1),
     };
 
     data.push(bank);
@@ -62,6 +108,7 @@ function getBankData(resultRows) {
 /**
  * Filter out COVID-19 info line
  * @param {HTMLCollection} tableCollection
+ * @returns {Array.<HTMLTableRowElement>}
  */
 function filterCovidLine(tableCollection) {
   return Array.prototype.filter.call(
@@ -76,7 +123,14 @@ function filterCovidLine(tableCollection) {
  */
 async function getCompanyData(pib) {
   const dom = await JSDOM.fromURL(URL + pib);
-  const result = filterCovidLine(dom.window.document.querySelector('table#result').rows);
+  const rawResult = dom.window.document.querySelector('table#result');
+  let result;
+
+  if (rawResult) {
+    result = filterCovidLine(rawResult.rows);
+  } else {
+    return Promise.reject('No result!');
+  }
 
   const company = {
     mb: getMB(result),
