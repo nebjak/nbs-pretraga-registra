@@ -1,7 +1,6 @@
-const { JSDOM } = require("jsdom");
+const { JSDOM } = require('jsdom');
 
-const URL =
-  "https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&pib=";
+const URL = 'https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&pib=';
 
 function getFromTable(resultRows, row, column) {
   return resultRows[row].children[column].textContent.trim();
@@ -45,12 +44,12 @@ function getBankData(resultRows) {
       opened: new Date(
         Date.parse(
           getFromTable(resultRows, i + 4, 3)
-            .split(".")
+            .split('.')
             .reverse()
-            .join("-")
+            .join('-')
         )
       ),
-      bank: getFromTable(resultRows, i + 4, 1)
+      bank: getFromTable(resultRows, i + 4, 1),
     };
 
     data.push(bank);
@@ -65,7 +64,7 @@ function getBankData(resultRows) {
  */
 async function getCompanyData(pib) {
   const dom = await JSDOM.fromURL(URL + pib);
-  const result = dom.window.document.querySelector("table#result").rows;
+  const result = dom.window.document.querySelector('table#result').rows;
 
   const company = {
     mb: getMB(result),
@@ -75,14 +74,14 @@ async function getCompanyData(pib) {
     place: getPlace(result),
     municipality: getMunicipality(result),
     activity: getActivity(result),
-    banks: getBankData(result)
+    banks: getBankData(result),
   };
 
   return company;
 }
 
 module.exports = {
-  getCompanyData
+  getCompanyData,
 };
 
 /**
