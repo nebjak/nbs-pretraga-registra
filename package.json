@@ -4,11 +4,18 @@
   "description": "NBS pretraga firmi i racuna",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "mocha",
+    "watch:test": "mocha --watch"
   },
   "author": "Nebojsa Jakovljevic",
   "license": "MIT",
   "dependencies": {
     "jsdom": "^16.2.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1"
   }
 }

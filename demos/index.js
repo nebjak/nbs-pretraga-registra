@@ -1,6 +1,6 @@
 const { getCompanyData } = require('../src/index');
 
-getCompanyData(110714220)
+getCompanyData(105359737)
   .then((result) => {
     console.dir(result);
   })
@@ -10,7 +10,7 @@ getCompanyData(110714220)
 
 (async () => {
   try {
-    const result = await getCompanyData(106644707);
+    const result = await getCompanyData(105359737);
     console.dir(result);
   } catch (error) {
     console.error(error);
