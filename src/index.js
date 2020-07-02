@@ -1,5 +1,6 @@
 const { JSDOM } = require('jsdom');
 
+// NBS data access url
 const URL = 'https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&pib=';
 
 function getFromTable(resultRows, row, column) {
@@ -59,12 +60,23 @@ function getBankData(resultRows) {
 }
 
 /**
+ * Filter out COVID-19 info line
+ * @param {HTMLCollection} tableCollection
+ */
+function filterCovidLine(tableCollection) {
+  return Array.prototype.filter.call(
+    tableCollection,
+    (item) => !Boolean(item.innerHTML.match(/Namenski račun za isplatu direktnih davanja COVID-19\./))
+  );
+}
+
+/**
  * @param {(string | number)} pib
  * @returns {Promise.<CompanyData>}
  */
 async function getCompanyData(pib) {
   const dom = await JSDOM.fromURL(URL + pib);
-  const result = dom.window.document.querySelector('table#result').rows;
+  const result = filterCovidLine(dom.window.document.querySelector('table#result').rows);
 
   const company = {
     mb: getMB(result),
