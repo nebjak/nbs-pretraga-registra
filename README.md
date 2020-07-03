@@ -2,6 +2,8 @@
 
 Pretraga NBS registra pravnih lica po PIB-u i matičnom broju.
 
+[![Build Status][travis-image]][travis-url]
+
 ## Pretraga po PIB-u
 
 ### Promise .then() - .catch()
@@ -87,3 +89,6 @@ getCompanyDataByMB('17402200')
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+[travis-image]: https://travis-ci.org/nebjak/nbs-pretraga-registra.svg?branch=master
+[travis-url]: https://travis-ci.org/github/nebjak/nbs-pretraga-registra
