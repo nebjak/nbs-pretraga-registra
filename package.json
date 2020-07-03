@@ -4,8 +4,8 @@
   "description": "NBS pretraga firmi i racuna",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --exit",
-    "watch:test": "mocha --watch"
+    "test": "mocha --exit --no-timeout",
+    "watch:test": "mocha --watch --no-timeout"
   },
   "author": "Nebojsa Jakovljevic",
   "license": "MIT",
