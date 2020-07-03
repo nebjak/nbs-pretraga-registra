@@ -1,13 +1,30 @@
 {
-  "name": "nbs-pretraga",
+  "name": "nbs-pretraga-registra",
   "version": "1.0.0",
-  "description": "NBS pretraga firmi i racuna",
+  "description": "Pretraga registra pravnih lica NBS po PIB-u i matičnom broju",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --exit",
-    "watch:test": "mocha --watch"
+    "test": "mocha --exit --no-timeout",
+    "watch:test": "mocha --watch --no-timeout"
   },
   "author": "Nebojsa Jakovljevic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nebjak/nbs-pretraga-registra.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nebjak/nbs-pretraga-registra/issues"
+  },
+  "keywords": [
+    "serbia",
+    "srbija",
+    "nbs",
+    "firme",
+    "pretraga",
+    "registar",
+    "pib",
+    "maticni broj"
+  ],
   "license": "MIT",
   "dependencies": {
     "jsdom": "^16.2.2"
@@ -17,5 +34,8 @@
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
     "mocha": "^8.0.1"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

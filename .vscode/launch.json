@@ -7,11 +7,22 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}/test/demo.js"
+      "name": "Launch Demo",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/demos/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Test",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "stopOnEntry": false,
+      "args": ["--no-timeouts", "--colors"],
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": {
+        "NODE_ENV": "testing"
+      }
     }
   ]
 }

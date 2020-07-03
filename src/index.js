@@ -1,10 +1,9 @@
 const { JSDOM } = require('jsdom');
 
 // NBS data access url
-const URL = 'https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&pib=';
+const URL = 'https://www.nbs.rs/rir_pn/pn_rir.html.jsp?type=rir_results&lang=SER_CIR&konverzija=yes&';
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @param {number} row
  * @param {number} column
@@ -15,7 +14,6 @@ function getFromTable(rawResult, row, column) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -24,7 +22,6 @@ function getMB(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -33,7 +30,6 @@ function getPIB(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -42,7 +38,6 @@ function getName(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -51,7 +46,6 @@ function getAddress(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -60,7 +54,6 @@ function getPlace(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -69,7 +62,6 @@ function getMunicipality(rawResult) {
 }
 
 /**
- *
  * @param {Array.<HTMLTableRowElement>} rawResult
  * @returns {string}
  */
@@ -118,18 +110,25 @@ function filterCovidLine(tableCollection) {
 }
 
 /**
- * @param {(string | number)} pib
+ * Search for company data
+ * @param {string} query
+ * @param {(string | number)} param
  * @returns {Promise.<CompanyData>}
  */
-async function getCompanyData(pib) {
-  const dom = await JSDOM.fromURL(URL + pib);
+async function getCompanyData(query, param) {
+  let dom;
+  try {
+    dom = await JSDOM.fromURL(`${URL}${query}=${param}`);
+  } catch (error) {
+    return Promise.reject('Error: Data source. Try again later.');
+  }
   const rawResult = dom.window.document.querySelector('table#result');
   let result;
 
   if (rawResult) {
     result = filterCovidLine(rawResult.rows);
   } else {
-    return Promise.reject('No result!');
+    return Promise.reject('Error: No result.');
   }
 
   const company = {
@@ -146,8 +145,37 @@ async function getCompanyData(pib) {
   return company;
 }
 
+/**
+ * Search for company data by PIB (Tax number)
+ * @param {(string | number)} pib
+ * @returns {Promise.<CompanyData>}
+ */
+async function getCompanyDataByPIB(pib) {
+  try {
+    const company = await getCompanyData('pib', pib);
+    return company;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+/**
+ * Search for comany data by MB (registration number)
+ * @param {(string | number)} mb
+ * @returns {Promise.<CompanyData>}
+ */
+async function getCompanyDataByMB(mb) {
+  try {
+    const company = await getCompanyData('matbr', mb);
+    return company;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 module.exports = {
-  getCompanyData,
+  getCompanyDataByMB,
+  getCompanyDataByPIB,
 };
 
 /**
