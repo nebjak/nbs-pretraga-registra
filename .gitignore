@@ -118,3 +118,6 @@ dist
 
 # Vim
 *.swp
+
+# demos package-lock
+demos/package-lock.json
