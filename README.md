@@ -2,6 +2,16 @@
 
 Pretraga NBS registra pravnih lica po PIB-u i matičnom broju.
 
+## Instalacija
+
+```sh
+npm install nbs-pretraga-registra
+```
+
+```javascript
+const { getCompanyDataByPIB, getCompanyDataByMB } = require('nbs-pretraga-registra');
+```
+
 ## Pretraga po PIB-u
 
 ### Promise .then() - .catch()
